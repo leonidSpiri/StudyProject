@@ -1,27 +1,44 @@
+import java.util.Arrays
+
 class MyArray(capacity: Int) {
     private val array: IntArray
     private var nextElement: Int
+    private var isSort: Boolean
 
     init {
         array = IntArray(capacity)
         nextElement = 0
+        isSort = true
     }
 
     fun addNewElement(element: Int) {
-        array[nextElement] = element
-        println("new element ($element) added to array at [$nextElement].")
-        if (nextElement == array.lastIndex) nextElement = 0 else nextElement++
+        var loc = 0
+        for (i in 0..nextElement) {
+            loc = i
+            if (element == array[i]) return
+            if (element < array[i])
+                break
+        }
+
+        for (j in nextElement downTo (loc + 1))
+            array[j] = array[j - 1]
+
+        array[loc] = element
+        println("new element ($element) added to array at [$loc].")
+        if (nextElement != array.lastIndex) nextElement++
     }
 
     fun addNewElement(location: Int, element: Int) {
         array[location] = element
         println("new element ($element) added to array at [$location].")
+        if (nextElement != array.lastIndex) nextElement++
     }
 
     fun deleteElement(location: Int) {
         for (i in location until array.lastIndex) array[i] = array[i + 1]
         array[array.size - 1] = 0
         println("element was deleted in array at [$location].")
+        isSort = false
     }
 
     fun deleteElement(element: Long) {
@@ -35,6 +52,7 @@ class MyArray(capacity: Int) {
             }
         }
         if (!flag) println("Nothing was found")
+        isSort = false
     }
 
     fun findElement(element: Int) {
@@ -46,6 +64,15 @@ class MyArray(capacity: Int) {
             }
         }
         if (!flag) println("Nothing was found")
+    }
+
+    fun sorting() {
+        Arrays.sort(array)
+        isSort = true
+    }
+
+    fun binarySearch(element: Int) {
+
     }
 
     fun printArray() {
