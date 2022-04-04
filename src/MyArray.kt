@@ -40,6 +40,7 @@ class MyArray(capacity: Int) {
         for (i in location until array.lastIndex) array[i] = array[i + 1]
         array[array.size - 1] = 0
         println("element was deleted in array at [$location].")
+        nextElement--
     }
 
     fun deleteElement(element: Long) {
@@ -50,6 +51,7 @@ class MyArray(capacity: Int) {
                 println("element ($element) was deleted in array at [$i].")
                 array[array.size - 1] = 0
                 flag = true
+                nextElement--
             }
         }
         if (!flag) println("Nothing was found")

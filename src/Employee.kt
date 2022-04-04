@@ -5,13 +5,9 @@ class Employee(
     private var position: String,
     private var salary: Double = 0.0
 ) {
-    fun displayEmployee() {
-        println("first name: $firstName")
-        println("last name: $lastName")
-        println("age: $age")
-        println("position: $position")
-        println("salary: $salary$")
-    }
+    fun displayEmployee(): String =
+        "first name: $firstName || last name: $lastName || age: $age || position: $position || salary: $salary$"
 
     val getLastName get() = lastName
+    val getSalary get() = salary
 }
