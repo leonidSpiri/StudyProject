@@ -32,16 +32,16 @@ class EmployeeArray(capacity: Int) {
         return -1
     }
 
-    fun deleteOverPaid(){
+    fun deleteOverPaid() {
         var max = 0.0
         var index = -1
-        for (i in employeeArray.indices){
-            if (employeeArray[i] != null && max < employeeArray[i]!!.getSalary){
+        for (i in employeeArray.indices) {
+            if (employeeArray[i] != null && max < employeeArray[i]!!.getSalary) {
                 max = employeeArray[i]!!.getSalary
                 index = i
             }
         }
-        if (index != -1){
+        if (index != -1) {
             println("overpaid employee was ${employeeArray[index]!!.getLastName} with salary ${employeeArray[index]!!.getSalary.toInt()}$")
             deleteElement(employeeArray[index]!!.getLastName)
         }
@@ -49,7 +49,17 @@ class EmployeeArray(capacity: Int) {
 
     fun printArray() = employeeArray.forEach { if (it != null) println(it.displayEmployee()) }
 
-    fun arraySize() = employeeArray.size
+    fun lastNameSort() {
+        for (i in 1..employeeArray.lastIndex) {
+            val temp = employeeArray[i]
+            var j = i
+            while (j > 0 && employeeArray[j] != null && employeeArray[j - 1]!!.getLastName > temp!!.getLastName) {
+                employeeArray[j] = employeeArray[j - 1]
+                j--
+            }
+            employeeArray[j] = temp
+        }
+    }
 }
 /*
 for tests:

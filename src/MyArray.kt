@@ -19,15 +19,11 @@ class MyArray(capacity: Int) {
         for (j in nextElement downTo (loc + 1))
             array[j] = array[j - 1]
         array[loc] = element
-        println("new element ($element) added to array at [$loc].")
         if (nextElement != array.lastIndex) nextElement++
     }
 
     fun addNewElement(location: Int, element: Int) {
         array[location] = element
-        println("new element ($element) added to array at [$location].")
-        if (nextElement != array.lastIndex) nextElement++
-        sorting()
     }
 
     fun deleteElement(location: Int) {
@@ -37,7 +33,7 @@ class MyArray(capacity: Int) {
         nextElement--
     }
 
-    fun deleteElement(element: Long) {
+    fun findAndDeleteElement(element: Long) {
         var flag = false
         for (i in array.indices) {
             if (array[i].toLong() == element) {
@@ -62,7 +58,6 @@ class MyArray(capacity: Int) {
         }
         if (!flag) println("Nothing was found")
     }
-
 
     fun binarySearch(element: Int) {
         sorting()
@@ -89,11 +84,46 @@ class MyArray(capacity: Int) {
         for (i in array.indices) println("array[ " + i + " ] = " + array[i])
     }
 
-    fun arraySize() = array.size
-
     private fun sorting() {
         nextElement = array.lastIndex
         Arrays.sort(array)
+    }
+
+    fun bubbleSort() {
+        for (i in (array.lastIndex - 1) downTo 1) {
+            for (j in 0..i) {
+                val temp = array[j]
+                if (temp > array[j + 1]) {
+                    array[j] = array[j + 1]
+                    array[j + 1] = temp
+                }
+            }
+        }
+    }
+
+    fun selectSort() {
+        for (i in 0 until array.lastIndex) {
+            var min = i
+            for (j in i + 1..array.lastIndex) {
+                if (array[j] < array[min])
+                    min = j
+            }
+            val temp = array[i]
+            array[i] = array[min]
+            array[min] = temp
+        }
+    }
+
+    fun insertSort() {
+        for (i in 1..array.lastIndex) {
+            val temp = array[i]
+            var j = i
+            while (j > 0 && array[j - 1] > temp) {
+                array[j] = array[j - 1]
+                j--
+            }
+            array[j] = temp
+        }
     }
 }
 
@@ -116,6 +146,10 @@ for tests:
     println("binarySearch: ${end - start -1} ms")
 
     array.addNewElement(5041)
-    array.deleteElement(5041)
+    array.findAndDeleteElement(5041)
+    array.printArray()
+    array.bubbleSort()
+    array.selectSort()
+    array.insertSort()
     array.printArray()
 */
