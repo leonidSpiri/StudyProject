@@ -1,13 +1,8 @@
-import java.util.Arrays
+import java.util.*
 
 class MyArray(capacity: Int) {
-    private val array: IntArray
-    private var nextElement: Int
-
-    init {
-        array = IntArray(capacity)
-        nextElement = 0
-    }
+    private val array = IntArray(capacity)
+    private var nextElement = 0
 
     fun addNewElement(element: Int) {
         var loc = 0
@@ -23,7 +18,6 @@ class MyArray(capacity: Int) {
 
         for (j in nextElement downTo (loc + 1))
             array[j] = array[j - 1]
-
         array[loc] = element
         println("new element ($element) added to array at [$loc].")
         if (nextElement != array.lastIndex) nextElement++
@@ -58,7 +52,7 @@ class MyArray(capacity: Int) {
     }
 
     fun linearSearch(element: Int) {
-
+        sorting()
         var flag = false
         for (i in array.indices) {
             if (array[i] == element) {
@@ -71,13 +65,14 @@ class MyArray(capacity: Int) {
 
 
     fun binarySearch(element: Int) {
+        sorting()
         var lowerBound = 0
         var upperBound = array.lastIndex
         var curIn = 0
 
         while (true) {
             curIn = (lowerBound + upperBound) / 2
-            if (array[curIn].equals(element)) {
+            if (array[curIn] == element) {
                 println("element ($element) found in array at [$curIn].")
                 return
             } else if (lowerBound > upperBound) {
@@ -95,23 +90,32 @@ class MyArray(capacity: Int) {
     }
 
     fun arraySize() = array.size
-    fun sorting() = Arrays.sort(array)
+
+    private fun sorting() {
+        nextElement = array.lastIndex
+        Arrays.sort(array)
+    }
 }
 
 /*
 for tests:
-val array = MyArray(50)
-    for (i in 0..60)
-        array.addNewElement((3..500).random())
+    val array = MyArray(5000)
+    for (i in 0..10000)
+        array.addNewElement((-500..5040).random())
+
     var start = System.currentTimeMillis()
-    array.linearSearch(23)
-    Thread.sleep(0)
+    array.linearSearch(2463)
+    Thread.sleep(1)
     var end = System.currentTimeMillis()
-    println("linearSearch: ${end - start} ms")
+    println("linearSearch: ${end - start-1} ms")
+
     start = System.currentTimeMillis()
-    array.binarySearch(23)
-    Thread.sleep(0)
+    array.binarySearch(2463)
+    Thread.sleep(1)
     end = System.currentTimeMillis()
-    println("binarySearch: ${end - start} ms")
+    println("binarySearch: ${end - start -1} ms")
+
+    array.addNewElement(5041)
+    array.deleteElement(5041)
     array.printArray()
 */
