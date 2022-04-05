@@ -9,4 +9,8 @@ class MyStack(capacity: Int) {
     fun peek(): Char = array[top]
 
     val isEmpty get() = top == -1
+
+    fun printArray() {
+        for (i in 0..top) println("array[ " + i + " ] = " + array[i].toString())
+    }
 }
