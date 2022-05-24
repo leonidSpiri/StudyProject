@@ -7,4 +7,6 @@ fun main() {
     println(queue.peekMin)
     while (!queue.isEmpty)
         println(queue.remove())
+    
+
 }
