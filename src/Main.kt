@@ -1,12 +1,8 @@
+import calculator.CalcApp
+import java.util.*
 
 fun main() {
     println("Hello World!")
-    val queue = MyPriorityQueue(capacity = 10)
-    for (i in 10 .. 50 step 10)
-        queue.insert(i)
-    println(queue.peekMin)
-    while (!queue.isEmpty)
-        println(queue.remove())
-    
-
+    val scanner = Scanner(System.`in`)
+    println("result = " + CalcApp(input = scanner.nextLine()).doCalculate())
 }

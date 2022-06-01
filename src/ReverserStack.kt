@@ -5,7 +5,7 @@ class ReverserStack(private var input: String) {
         for (element in input)
             stack.push(element)
         while (!stack.isEmpty)
-            output += stack.pop()
+            output += stack.pop
         return output
     }
 }

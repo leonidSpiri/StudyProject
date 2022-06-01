@@ -1,8 +1,11 @@
+package calculator
+
+import MyStack
+
 class BracketChecker(private val expression: String) {
 
-    fun check() {
+    fun check(): Boolean {
         val stack = MyStack(capacity = expression.length)
-        var isGood = true
         for (i in expression.indices) {
             val element = expression[i]
 
@@ -12,31 +15,26 @@ class BracketChecker(private val expression: String) {
             }
             if (")}]".contains(element)) {
                 if (!stack.isEmpty) {
-                    val tempPop = stack.pop()
+                    val tempPop = stack.pop
                     if ((element == ')' && tempPop != '(')
                         || (element == ']' && tempPop != '[')
                         || (element == '}' && tempPop != '{')
-                    ) {
-                        isGood = false
-                        println("Error: $element at $i")
-                        break
-                    }
-                } else {
-                    isGood = false
-                    println("Error: $element at $i")
-                    break
-                }
+                    )
+                        throw java.lang.Exception("Error: element \"$element\" at $i")
+
+                } else
+                    throw java.lang.Exception("Error: element \"$element\" at $i")
+
             }
         }
         if (!stack.isEmpty)
-            println("Error: missing right delimiter")
-        else
-            println("Verification completed successfully. No errors found")
+            throw java.lang.Exception("Error: missing right delimiter")
+        return true
     }
 }
 /*
 for tests:
     val scanner = Scanner(System.`in`)
-    val rev = BracketChecker(expression = scanner.next())
+    val rev = calculator.BracketChecker(expression = scanner.next())
     rev.check()
  */
