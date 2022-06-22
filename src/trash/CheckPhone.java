@@ -17,8 +17,8 @@ public class CheckPhone {
     }
 
     public static void main(String[] args) {
-        String phone = "";
-        String newPhone = "";
+        String phone;
+        StringBuilder newPhone = new StringBuilder();
         Scanner in = new Scanner(System.in);
         phone = in.nextLine();
         Boolean isRight = checkPhone(phone);
@@ -28,21 +28,21 @@ public class CheckPhone {
             phone = phone.replaceAll(" ", "");
             phone = phone.replace("(", "");
             phone = phone.replace(")", "");
-            newPhone += phone.charAt(0);
-            newPhone += " (";
+            newPhone.append(phone.charAt(0));
+            newPhone.append(" (");
             for (int i = 0; i < 3; i++)
-                newPhone += phone.charAt(i + 1);
-            newPhone += ") ";
+                newPhone.append(phone.charAt(i + 1));
+            newPhone.append(") ");
 
             for (int i = 0; i < 3; i++)
-                newPhone += phone.charAt(i + 4);
-            newPhone += "-";
+                newPhone.append(phone.charAt(i + 4));
+            newPhone.append("-");
 
             for (int i = 0; i < 2; i++)
-                newPhone += phone.charAt(i + 7);
-            newPhone += "-";
+                newPhone.append(phone.charAt(i + 7));
+            newPhone.append("-");
             for (int i = 0; i < 2; i++)
-                newPhone += phone.charAt(i + 9);
+                newPhone.append(phone.charAt(i + 9));
             System.out.println(newPhone);
         } else
             System.out.println("error");
