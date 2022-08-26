@@ -17,7 +17,7 @@ public class CheckPhone {
     }
 
     public static void main(String[] args) {
-        String phone;
+        String phone = "+7(912)345-67-89"; // неправильный номер
         StringBuilder newPhone = new StringBuilder();
         Scanner in = new Scanner(System.in);
         phone = in.nextLine();
