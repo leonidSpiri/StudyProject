@@ -1,17 +1,28 @@
-import trash.ImageToBase64
-import java.io.File
-import java.util.*
-
 fun main() {
     println("Hello World!")
-    val scanner = Scanner(System.`in`)
-    val imgByte = ImageToBase64().imageToBase64(scanner.next())
-    File("/Users/admin/Downloads/mac.txt").writeText(imgByte)
-    println("Done!")
-    //println(ImageToBase64().readFromInputStream(scanner.next()))
-    //println("result = " + CalcApp(input = scanner.nextLine()).doCalculate())
+    val list = DoubleLinkedList()
+    list.insertFirst(1)
+    list.insertFirst(2)
+    list.insertFirst(3)
+    list.insertFirst(4)
+    list.insertFirst(5)
+    list.insertLast(6)
+    list.insertLast(7)
+    list.insertLast(8)
+    list.insertLast(9)
+    list.insertLast(10)
 
+    list.displayForward()
+    list.displayBackward()
+
+    list.deleteFirst()
+    list.deleteLast()
+    list.deleteKey(9)
+
+    list.displayForward()
+
+    list.insertAfter(2, 11)
+    list.insertAfter(7, 12)
+
+    list.displayForward()
 }
-
-// /Users/admin/Downloads/Photos-001/ph_02.PNG
-// /Users/admin/Downloads/mac.txt
