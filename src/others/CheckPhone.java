@@ -1,4 +1,4 @@
-package trash;
+package others;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;

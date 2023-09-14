@@ -1,4 +1,4 @@
-package trash;
+package pointless_attempts;
 
 import java.util.Scanner;
 

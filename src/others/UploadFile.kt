@@ -1,3 +1,5 @@
+package others
+
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -31,9 +33,8 @@ fun uploadFiles(directoryPath: String, url: String, accessToken: String) {
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
                     throw IllegalStateException("Unexpected response code: ${response.code}")
-                }
-                else{
-                    println()
+                } else {
+                    println(response.body?.string())
                 }
             }
         }
@@ -44,8 +45,8 @@ fun uploadFiles(directoryPath: String, url: String, accessToken: String) {
 
 fun main() {
     uploadFiles(
-        directoryPath = "C:\\Users\\Administrator\\Pictures\\photos",
-        url = "http://localhost:3000/media/upload_media",
-        accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiN2FmYmEyYjYtNTg3ZS00MWJmLWFlNTQtYTU3ZWY1NWJiMjJhIiwidXNlckVtYWlsIjoiZW1haWwxQG1haWwuY29tIiwiaWF0IjoxNjgxMTMwNjAxLCJleHAiOjE2ODE5OTQ2MDF9.wKb0feB4B5HF6gVEvjSr7XsRJ1cEmpvr2tt_3p-C55o"
+        directoryPath = "/Users/admin/Documents/photos",
+        url = "http://home-system.sknt.ru:3000/media/upload_media",
+        accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNDNmOWYxYzItOWU5NC00N2YxLWEzYjctNjM5M2Y4NjMwZmRlIiwidXNlckVtYWlsIjoiZW1haWwxQG1haWwuY29tIiwiaWF0IjoxNjgzNjQzMTU0LCJleHAiOjE2ODQ1MDcxNTR9.fxpz0h3gDR_DJt7A5VPZtEM2XUeaq3tTosTvERBI-iM"
     )
 }

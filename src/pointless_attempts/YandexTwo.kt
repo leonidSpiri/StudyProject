@@ -1,6 +1,6 @@
-package trash
+package pointless_attempts
 
-import java.util.Scanner
+import java.util.*
 
 fun main() {
     val scanner = Scanner(System.`in`)

@@ -1,4 +1,4 @@
-package trash
+package pointless_attempts
 
 fun main() {
     val path = readln()

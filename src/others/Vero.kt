@@ -1,4 +1,4 @@
-package trash
+package others
 
 fun main() {
     val list = arrayOf(31, 42, 54, 74, 55, 66, 78, 82, 92)
