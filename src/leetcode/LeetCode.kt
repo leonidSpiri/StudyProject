@@ -1,5 +1,7 @@
 package leetcode
 
+import kotlin.math.min
+
 private fun main() {
     //println(countHillsAndValleysInAnArray (intArrayOf(2, 4, 1, 1, 6, 5))) //1
     //println(divideArrayIntoEqualPairs(intArrayOf(3, 2, 3, 2, 2, 2, 2, 3))) //2
@@ -11,6 +13,15 @@ private fun main() {
     //mergeSortedArray(nums1 = intArrayOf(1, 2, 3, 0, 0, 0), m = 3, nums2 = intArrayOf(2, 5, 6), n = 3) //8
     //println(plusOne(intArrayOf(2, 3, 4, 9, 9, 8, 7, 9, 9)).contentToString()) //9
     //println(addBinary("1010", "1011")) //10
+    //println(addTwoNumbers(intArrayOf(1,0), intArrayOf(9, 9, 9, 9)).contentToString()) //11
+    //println(lengthOfLongestSubstring("asjrgapa")) //12
+    //println(maxArea(intArrayOf(2, 3, 4, 5, 18, 17, 6))) //13
+    //println(intToRoman(1994)) //14
+    //println(romanToInt("MCMXCIV")) //15
+    //println(isValidParentheses("[({()()()(){}{}{[][][]}})][")) //16
+    //mergeTwoLists() //17
+    //println(findTheIndexOfTheFirstOccurrenceInAString("mississippi", "issipi")) //18
+    //println(findFirstAndLastPositionOfElementInSortedArray(intArrayOf(1, 2, 9), 9).contentToString()) //19
 }
 
 private fun countHillsAndValleysInAnArray(nums: IntArray): Int {
@@ -178,3 +189,236 @@ private fun addBinary(a: String, b: String): String {
 
 private fun getNextBinaryValueFromList(i: Int, list: List<String>) =
     if (i <= list.lastIndex && list[i] == "1") 1 else 0
+
+private fun getNextDecimalValueFromArray(i: Int, array: IntArray) = if (i < array.size) array[i] else 0
+
+private fun addTwoNumbers(l1: IntArray, l2: IntArray): IntArray {
+    val maxArrayValue = maxOf(l1.size, l2.size)
+    val result = mutableListOf<Int>()
+    var pass = 0
+    for (i in 0 until maxArrayValue) {
+        val count = getNextDecimalValueFromArray(i, l1) + getNextDecimalValueFromArray(i, l2) + pass
+        pass = 0
+        if (count > 9) {
+            pass = 1
+            result.add(count - 10)
+        } else {
+            result.add(count)
+        }
+    }
+    if (pass == 1)
+        result.add(1)
+
+    return result.toIntArray()
+}
+
+private fun lengthOfLongestSubstring(s: String): Int {
+    val buffList = linkedSetOf<Char>()
+    var longestString = 0
+    for (i in s.indices) {
+        for (j in i..s.lastIndex) {
+            if (!buffList.contains(s[j])) buffList.add(s[j])
+            else {
+                longestString = maxOf(longestString, buffList.size)
+                buffList.clear()
+                buffList.add(s[j])
+            }
+        }
+        longestString = maxOf(longestString, buffList.size)
+        buffList.clear()
+    }
+    return maxOf(longestString, buffList.size)
+}
+
+private fun maxArea(height: IntArray): Int {
+    /*You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+    Find two lines that together with the x-axis form a container, such that the container contains the most water.
+    Return the maximum amount of water a container can store.
+    Notice that you may not slant the container.*/
+    var left = 0
+    var right = height.lastIndex
+    var maxResult = 0
+    while (left != right) {
+        val square = min(height[left], height[right]) * (right - left)
+        maxResult = maxOf(maxResult, square)
+        if (height[right] < height[left]) right--
+        else left++
+    }
+    return maxResult
+}
+
+private fun intToRoman(num: Int): String {
+    //Given an integer, convert it to a roman numeral.
+    var digitClass = 1
+    var newNum = num
+    var result = ""
+    while (newNum >= 1) {
+        val workNum = (newNum % 10)
+        when (digitClass) {
+            1 -> {
+                when {
+                    workNum < 4 -> {
+                        for (i in 1..workNum) result += "I"
+                    }
+
+                    workNum == 4 -> result = "IV"
+                    workNum == 5 -> result = "V"
+                    workNum < 9 -> {
+                        result = "V"
+                        for (i in 6..workNum) result += "I"
+                    }
+
+                    else -> result = "IX"
+
+                }
+            }
+
+            10 -> {
+                when {
+                    workNum < 4 -> {
+                        for (i in 1..workNum) result = "X${result}"
+                    }
+
+                    workNum == 4 -> result = "XL${result}"
+                    workNum == 5 -> result = "L${result}"
+                    workNum < 9 -> {
+                        var buffStr = "L"
+                        for (i in 6..workNum) buffStr += "X"
+                        result = buffStr + result
+                    }
+
+                    else -> result = "XC${result}"
+
+                }
+            }
+
+            100 -> {
+                when {
+                    workNum < 4 -> {
+                        for (i in 1..workNum) result = "C${result}"
+                    }
+
+                    workNum == 4 -> result = "CD${result}"
+                    workNum == 5 -> result = "D${result}"
+                    workNum < 9 -> {
+                        var buffStr = "D"
+                        for (i in 6..workNum) buffStr += "C"
+                        result = buffStr + result
+                    }
+
+                    else -> result = "CM${result}"
+                }
+            }
+
+            1000 ->
+                for (i in 1..workNum) result = "M${result}"
+        }
+        newNum /= 10
+        digitClass *= 10
+    }
+    return result
+}
+
+private fun romanToInt(str: String): Int {
+    //Given a roman numeral, convert it to an integer.
+    val romanNumerals = mapOf(
+        'I' to 1,
+        'V' to 5,
+        'X' to 10,
+        'L' to 50,
+        'C' to 100,
+        'D' to 500,
+        'M' to 1000
+    )
+
+    var result = 0
+    for (i in str.indices) {
+        val workNum = romanNumerals.getValue(str[i])
+        if ((i + 1) < str.length) {
+            val nextNum = romanNumerals.getValue(str[i + 1])
+            if (workNum < nextNum) result -= workNum
+            else result += workNum
+        } else result += workNum
+    }
+
+    return result
+}
+
+private fun isValidParentheses(s: String): Boolean {
+    //Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+    val stack = ArrayDeque<Char>()
+    s.forEach {
+        if (it == '(' || it == '{' || it == '[')
+            stack.addLast(it)
+        else
+            when (it) {
+                ')' -> if (stack.removeLastOrNull() != '(') return false
+                '}' -> if (stack.removeLastOrNull() != '{') return false
+                ']' -> if (stack.removeLastOrNull() != '[') return false
+            }
+    }
+
+    return stack.isEmpty()
+}
+
+private class ListNode(var `val`: Int) {
+    var next: ListNode? = null
+}
+
+private fun mergeTwoLists(list1: ListNode?, list2: ListNode?): ListNode? {
+    val result = ListNode(0)
+    var l1 = list1
+    var l2 = list2
+    var current = result
+    while (l1 != null && l2 != null) {
+        if (l1.`val` < l2.`val`) {
+            current.next = l1
+            l1 = l1.next
+        } else {
+            current.next = l2
+            l2 = l2.next
+        }
+        current = current.next!!
+    }
+    if (l1 != null) current.next = l1
+    if (l2 != null) current.next = l2
+    return result.next
+}
+
+private fun findTheIndexOfTheFirstOccurrenceInAString(haystack: String, needle: String): Int {
+    //Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+    if (needle.length > haystack.length) return -1
+    if (needle == haystack) return 0
+    var result: Int
+    for (i in haystack.indices)
+        if (haystack[i] == needle[0]) {
+            result = i
+            var isGood = true
+            for (j in needle.indices)
+                if ((i + j) >= haystack.length || haystack[i + j] != needle[j]) {
+                    result = -1
+                    isGood = false
+                    break
+                }
+            if (isGood) return result
+
+        }
+    return -1
+}
+
+private fun findFirstAndLastPositionOfElementInSortedArray(nums: IntArray, target: Int): IntArray {
+    /*Given an array of integers nums sorted in non-decreasing order, find the starting and ending position of a given target value.
+    If target is not found in the array, return [-1, -1].
+    You must write an algorithm with O(log n) runtime complexity.*/
+    var start = -1
+    var end = -1
+    val lastIndex = nums.lastIndex
+    for (i in nums.indices) {
+        if (start == -1 && nums[i] == target) start = i
+
+        if (end == -1 && nums[lastIndex - i] == target) end = lastIndex - i
+
+        if (start != -1 && end != -1) return intArrayOf(start, end)
+    }
+    return intArrayOf(start, end)
+}
