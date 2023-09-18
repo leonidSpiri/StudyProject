@@ -1,5 +1,6 @@
 package leetcode
 
+import kotlin.math.max
 import kotlin.math.min
 
 private fun main() {
@@ -22,6 +23,16 @@ private fun main() {
     //mergeTwoLists() //17
     //println(findTheIndexOfTheFirstOccurrenceInAString("mississippi", "issipi")) //18
     //println(findFirstAndLastPositionOfElementInSortedArray(intArrayOf(1, 2, 9), 9).contentToString()) //19
+    /* rotateMatrix(
+         arrayOf(
+             intArrayOf(5, 1, 9, 11),
+             intArrayOf(2, 4, 8, 10),
+             intArrayOf(13, 3, 6, 7),
+             intArrayOf(15, 14, 12, 16)
+         )
+     )*/ //20
+    //println(groupAnagrams(arrayOf("eat", "tea", "tan", "ate", "nat", "bat")).toString()) //21
+    //println(maxSubArray(intArrayOf(-2, 1, -3, 4, -1, 2, 1, -5, 4)))
 }
 
 private fun countHillsAndValleysInAnArray(nums: IntArray): Int {
@@ -421,4 +432,45 @@ private fun findFirstAndLastPositionOfElementInSortedArray(nums: IntArray, targe
         if (start != -1 && end != -1) return intArrayOf(start, end)
     }
     return intArrayOf(start, end)
+}
+
+private fun rotateMatrix(matrix: Array<IntArray>) {
+    /*You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise).
+    You have to rotate the image in-place, which means you have to modify the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.*/
+    val length = matrix.lastIndex
+    for (i in 0..length / 2) {
+        for (j in i until length - i) {
+            val tempNumber = matrix[i][j]
+            matrix[i][j] = matrix[length - j][i]
+            matrix[length - j][i] = matrix[length - i][length - j]
+            matrix[length - i][length - j] = matrix[j][length - i]
+            matrix[j][length - i] = tempNumber
+        }
+    }
+    matrix.forEach { println(it.contentToString()) }
+}
+
+private fun groupAnagrams(strs: Array<String>): List<List<String>> {
+    /*Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+    An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.*/
+    return mutableMapOf<String, MutableList<String>>().apply {
+        strs.forEach {
+            val key = String(it.toCharArray().sortedArray())
+            if (!this.contains(key)) {
+                this[key] = mutableListOf()
+            }
+            this[key]?.add(it)
+        }
+    }.map { it.value }
+}
+
+private fun maxSubArray(nums: IntArray): Int {
+    //Given an integer array nums, find the subarray with the largest sum, and return its sum.
+    var maxSum = nums[0]
+    var prefixSum = 0
+    for (num in nums) {
+        prefixSum = if (prefixSum < 0) num else (prefixSum + num)
+        maxSum = max(maxSum, prefixSum)
+    }
+    return maxSum
 }
