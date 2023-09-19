@@ -1,5 +1,7 @@
 package leetcode
 
+import java.util.*
+import kotlin.collections.ArrayDeque
 import kotlin.math.max
 import kotlin.math.min
 
@@ -32,7 +34,30 @@ private fun main() {
          )
      )*/ //20
     //println(groupAnagrams(arrayOf("eat", "tea", "tan", "ate", "nat", "bat")).toString()) //21
-    //println(maxSubArray(intArrayOf(-2, 1, -3, 4, -1, 2, 1, -5, 4)))
+    //println(maxSubArray(intArrayOf(-2, 1, -3, 4, -1, 2, 1, -5, 4))) //22
+    //println(longestNiceSubstring("YazaAay")) //23
+    //println(findTargetIndicesAfterSortingArray(intArrayOf(1, 2, 5, 2, 3), 2)) //24
+    //println(numberOfArithmeticTriplets(intArrayOf(0, 1, 4, 6, 7, 10), 3)) //25
+    //println(reverseWords("Let's take LeetCode contest")) //26
+    /*val r = TreeNode(20)
+    r.left = TreeNode(15)
+    r.right = TreeNode(7)
+    val l = TreeNode(9)
+    val n = TreeNode(3)
+    n.left = l
+    n.right = r
+    println(averageOfLevels(n).contentToString())*/ //27
+    /*println(
+        numUniqueEmails(
+            arrayOf(
+                "test.email+alex@leetcode.com",
+                "test.e.mail+bob.cathy@leetcode.com",
+                "testemail+david@lee.tcode.com"
+            )
+        )
+    )*/ //28
+    // println(shortestCompletingWord("1s3 456", arrayOf("looks", "pest", "stew", "show"))) //29
+    //println(removeAnagrams(arrayOf("abba", "baba", "bbaa", "cd", "cd"))) //30
 }
 
 private fun countHillsAndValleysInAnArray(nums: IntArray): Int {
@@ -376,6 +401,11 @@ private class ListNode(var `val`: Int) {
     var next: ListNode? = null
 }
 
+private class TreeNode(var `val`: Int) {
+    var left: TreeNode? = null
+    var right: TreeNode? = null
+}
+
 private fun mergeTwoLists(list1: ListNode?, list2: ListNode?): ListNode? {
     val result = ListNode(0)
     var l1 = list1
@@ -473,4 +503,132 @@ private fun maxSubArray(nums: IntArray): Int {
         maxSum = max(maxSum, prefixSum)
     }
     return maxSum
+}
+
+private fun longestNiceSubstring(s: String): String {
+    /*A string s is nice if, for every letter of the alphabet that s contains, it appears both in uppercase and lowercase. For example, "abABB" is nice because 'A' and 'a' appear, and 'B' and 'b' appear. However, "abA" is not because 'b' appears, but 'B' does not.
+    Given a string s, return the longest substring of s that is nice. If there are multiple, return the substring of the earliest occurrence. If there are none, return an empty string.*/
+    var result = ""
+    for (i in s.indices) {
+        var buff = ""
+        for (j in i..s.lastIndex) {
+            buff += s[j]
+            var isGood = true
+            for (k in buff.indices)
+                if (!buff.contains(buff[k].lowercaseChar()) || !buff.contains(buff[k].uppercaseChar())) {
+                    isGood = false
+                    break
+                }
+
+            if (isGood) if (result.length < buff.length) result = buff
+        }
+    }
+    return result
+}
+
+private fun findTargetIndicesAfterSortingArray(nums: IntArray, target: Int): List<Int> {
+    /*You are given a 0-indexed integer array nums and a target element target.
+    A target index is an index i such that nums[i] == target.
+    Return a list of the target indices of nums after sorting nums in non-decreasing order. If there are no target indices, return an empty list. The returned list must be sorted in increasing order.*/
+    nums.sort()
+    return mutableListOf<Int>().apply {
+        for (i in nums.indices)
+            if (nums[i] == target) this.add(i)
+    }
+}
+
+private fun numberOfArithmeticTriplets(nums: IntArray, diff: Int): Int {
+    /*You are given a 0-indexed, strictly increasing integer array nums and a positive integer diff. A triplet (i, j, k) is an arithmetic triplet if the following conditions are met:i < j < k, nums[j] - nums[i] == diff, and nums[k] - nums[j] == diff.
+    Return the number of unique arithmetic triplets.*/
+    var result = 0
+    for (i in nums.lastIndex downTo 2)
+        if (nums.contains(nums[i] - diff) && nums.contains(nums[i] - diff - diff))
+            result++
+    return result
+}
+
+private fun reverseWords(s: String): String {
+    var result = ""
+    s.split(" ").forEach {
+        for (i in it.lastIndex downTo 0)
+            result += it[i]
+        result += " "
+    }
+    return result.dropLast(1)
+}
+
+private fun averageOfLevels(root: TreeNode?): DoubleArray {
+    //Given the root of a binary tree, return the average value of the nodes on each level in the form of an array. Answers within 10^-5 of the actual answer will be accepted.
+    val result = mutableListOf<Double>()
+    val queue = ArrayDeque(listOf(root))
+    while (queue.isNotEmpty()) {
+        var levelSum = 0L
+        val levelCount = queue.size
+        for (i in 0 until levelCount) {
+            val node = queue.first()
+            queue.removeFirst()
+            if (node != null) {
+                levelSum += node.`val`
+                if (node.left != null)
+                    queue.add(node.left)
+                if (node.right != null)
+                    queue.add(node.right)
+            }
+        }
+        result.add((levelSum / levelCount.toDouble()))
+    }
+    return result.toDoubleArray()
+
+}
+
+private fun numUniqueEmails(emails: Array<String>): Int {
+    val resultList = mutableListOf<String>()
+    emails.forEach { email ->
+        val emailList = email.split("@")
+        val localName = emailList[0].split("+")[0].replace(".", "")
+        val uniqueEmail = localName + "@" + emailList[1]
+        if (!resultList.contains(uniqueEmail)) resultList.add(uniqueEmail)
+    }
+    return resultList.size
+}
+
+private fun shortestCompletingWord(licensePlate: String, words: Array<String>): String {
+    var result = ""
+    val plateList = licensePlate.split("")
+        .filter { it != "" && it != " " && it.toIntOrNull() == null }
+        .map {
+            it.lowercase(
+                Locale.getDefault()
+            )
+        }
+    words.forEach {
+        var buff = it
+        var isGood = true
+        for (i in plateList.indices) {
+            val new = buff.replaceFirst(plateList[i], "")
+            if (buff == new) {
+                isGood = false
+                break
+            }
+            buff = new
+        }
+        if (isGood && (result == "" || result.length > it.length)) result = it
+    }
+    return result
+}
+
+private fun removeAnagrams(words: Array<String>): List<String> {
+    /*You are given a 0-indexed string array words, where words[i] consists of lowercase English letters.
+    In one operation, select any index i such that 0 < i < words.length and words[i - 1] and words[i] are anagrams, and delete words[i] from words. Keep performing this operation as long as you can select an index that satisfies the conditions.
+    Return words after performing all operations. It can be shown that selecting the indices for each operation in any arbitrary order will lead to the same result.
+    An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase using all the original letters exactly once. For example, "dacb" is an anagram of "abdc".*/
+    var i = 0
+    val wordsList = words.toMutableList()
+    while (i < wordsList.lastIndex) {
+        val word = wordsList[i].toCharArray().sortedArray()
+        val nextWord = wordsList[i + 1].toCharArray().sortedArray()
+        if (word.contentEquals(nextWord)) wordsList.removeAt(i + 1)
+        else i++
+    }
+    return wordsList
 }
