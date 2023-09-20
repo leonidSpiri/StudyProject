@@ -58,6 +58,11 @@ private fun main() {
     )*/ //28
     // println(shortestCompletingWord("1s3 456", arrayOf("looks", "pest", "stew", "show"))) //29
     //println(removeAnagrams(arrayOf("abba", "baba", "bbaa", "cd", "cd"))) //30
+    //println(arrayPairSum(intArrayOf(1, 4, 3, 2))) //31
+    //println(canJump(intArrayOf(3, 2, 1, 0, 4))) //32
+    //println(canCompleteCircuit(intArrayOf(5, 1, 2, 3, 4), intArrayOf(4, 4, 1, 5, 1))) //33
+    //deleteDuplicates() //34
+    //isListNodePalindrome() //35
 }
 
 private fun countHillsAndValleysInAnArray(nums: IntArray): Int {
@@ -631,4 +636,80 @@ private fun removeAnagrams(words: Array<String>): List<String> {
         else i++
     }
     return wordsList
+}
+
+private fun arrayPairSum(nums: IntArray): Int {
+    //Given an integer array nums of 2n integers, group these integers into n pairs (a1, b1), (a2, b2), ..., (an, bn) such that the sum of min(ai, bi) for all i is maximized. Return the maximized sum.
+    nums.sortDescending()
+    var sum = 0
+    for (i in 0 until nums.lastIndex step 2) {
+        sum += minOf(nums[i], nums[i + 1])
+    }
+    return sum
+}
+
+private fun canJump(nums: IntArray): Boolean {
+    /*You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
+    Return true if you can reach the last index, or false otherwise.*/
+    var goal = nums.lastIndex
+    for (i in nums.lastIndex downTo 0) {
+        if (nums[i] + i >= goal)
+            goal = i
+    }
+    return goal == 0
+}
+
+private fun canCompleteCircuit(gas: IntArray, cost: IntArray): Int {
+    var startIndex = 0
+    var sumOfGas = 0
+    var tank = 0
+
+    gas.forEachIndexed { index, unit ->
+        tank += unit - cost[index]
+        sumOfGas += unit - cost[index]
+
+        if (tank < 0) {
+            startIndex = index + 1
+            tank = 0
+        }
+    }
+
+    return if (sumOfGas < 0)
+        -1
+    else
+        startIndex
+}
+
+private fun deleteDuplicates(head: ListNode?): ListNode? {
+    if (head?.next == null)
+        return head
+
+    var h = head
+    while (h?.next != null) {
+        if (h.`val` == h.next!!.`val`)
+            h.next = h.next!!.next
+        else
+            h = h.next
+
+
+    }
+    return head
+}
+
+private fun isListNodePalindrome(head: ListNode?): Boolean {
+    //Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
+    val headList: MutableList<Int> = mutableListOf()
+    var node = head
+    while (node != null) {
+        headList.add(node.`val`)
+        node = node.next
+    }
+    var start = 0
+    var end = headList.size - 1
+    while (start < end) {
+        if (headList[start] != headList[end]) return false
+        start++
+        end--
+    }
+    return true
 }
