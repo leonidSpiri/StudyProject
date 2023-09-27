@@ -1,7 +1,7 @@
 package leetcode
 
 fun main() {
-    //println(removeDuplicateLetters("bcabc"))
+    println(decodeAtIndex("leet2code3", 10))
 }
 
 private fun findTheDifference(s: String, t: String): Char {
@@ -24,4 +24,45 @@ private fun removeDuplicateLetters(s: String) = buildString {
             append(c)
         }
     }
+}
+
+private fun decodeAtIndex(s: String, k: Int): String {
+    var totalLength = 0L
+    var resIndex = k.toLong()
+    var lastIndex = s.lastIndex
+
+    for (i in s.indices) {
+        val currentChar = s[i]
+
+        if (currentChar.isDigit()) {
+            totalLength *= currentChar.digitToInt()
+        } else {
+            totalLength++
+
+            if (totalLength == resIndex) {
+                return currentChar.toString()
+            }
+        }
+
+        if (totalLength >= resIndex) {
+            lastIndex = i
+            break
+        }
+    }
+
+    for (i in (0..lastIndex).reversed()) {
+        val currentChar = s[i]
+
+        if (currentChar.isDigit()) {
+            totalLength /= currentChar.digitToInt()
+            resIndex %= totalLength
+        } else {
+            if (resIndex == 0L || resIndex == totalLength) {
+                return currentChar.toString()
+            }
+            totalLength--
+        }
+    }
+
+    return ""
 }
