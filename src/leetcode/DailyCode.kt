@@ -1,7 +1,7 @@
 package leetcode
 
 fun main() {
-    println(decodeAtIndex("leet2code3", 10))
+    print(sortArrayByParity(intArrayOf(3,1,2,4)).contentToString())
 }
 
 private fun findTheDifference(s: String, t: String): Char {
@@ -66,3 +66,13 @@ private fun decodeAtIndex(s: String, k: Int): String {
 
     return ""
 }
+
+private fun sortArrayByParity(nums: IntArray): IntArray {
+    val res = mutableListOf(nums[0])
+    for (i in 1 until nums.size) {
+        if (nums[i] % 2 == 0) res.add(0, nums[i])
+        else res.add(res.size, nums[i])
+    }
+    return res.toIntArray()
+}
+
